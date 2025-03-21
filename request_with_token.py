@@ -3,6 +3,19 @@ import requests
 import params 
 import pandas as pd
 
+def check_if_valid_data(df: pd.DataFrame) -> bool:
+    if df.empty:
+        print("No existes registros por procesar")
+        return False
+    
+    if pd.Series(df['played_at']).is_unique:
+        pass
+    else:
+        raise Exception("Primary Key duplicada")
+    
+    if df.isnull().values.any():
+        raise Exception("Se encontraron valores nulos")
+
 def get_recently_played():
     '''
      Description: 
@@ -44,7 +57,8 @@ def get_data_frame():
     return song_df
 
 def main():
-    print(get_data_frame())
+    if check_if_valid_data(get_data_frame()):
+        print("Data frame válido.")
     
 if __name__ == "__main__":
     main()
